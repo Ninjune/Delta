@@ -1,4 +1,4 @@
-package com.github.ninjune.delta.mixin;
+package dev.ninjune.delta.mixin;
 
 import net.minecraft.client.gui.GuiMainMenu;
 import org.spongepowered.asm.mixin.Mixin;
