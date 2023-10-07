@@ -208,7 +208,7 @@ public class Tessellator {
      * @param z the z position
      * 
      */
-    public static void pos(float x, float y, float z) {
+    public static void pos(double x, double y, double z) {
         if (!began)
             begin(7, true);
         if (!firstVertex)
