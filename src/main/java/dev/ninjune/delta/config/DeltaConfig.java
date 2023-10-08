@@ -24,10 +24,19 @@ public class DeltaConfig extends Config
     )
     public static boolean hideOriginalBeam = true;
 
+    @Switch(
+            name = "Beam 2d",
+            description = "Make beam 2d",
+            category = "Slayers",
+            subcategory = "Blaze"
+    )
+    public static boolean beam2d = true;
+
     public DeltaConfig()
     {
         super(new Mod(Delta.MODNAME, ModType.SKYBLOCK), "delta.json");
         initialize();
         addDependency("Hide Original Beam", "Beam Highlight");
+        addDependency("Beam 2d", "Beam Highlight");
     }
 }

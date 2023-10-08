@@ -1,4 +1,10 @@
-# Setup Developer Environment
+# Delta
+/ocfg > Delta for config for settings for now.
+
+Features:
+- Blaze beam highlight
+
+## Setup Developer Environment
 ### IntelliJ Idea
 To get started, clone this repository.
 

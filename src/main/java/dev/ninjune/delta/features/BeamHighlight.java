@@ -8,18 +8,23 @@ import dev.ninjune.delta.util.RenderUtil;
 import net.minecraft.util.BlockPos;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector3f;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static dev.ninjune.delta.Delta.mc;
+import static dev.ninjune.delta.util.RenderUtil.interpolatePosition;
 
 // goal is to highlight the beam from quazii as a rectangle,
 // perhaps find render library or figure it out with opengl
 
 public class BeamHighlight
 {
+    private final HashMap<Entity, Vector3f> prevPositions = new HashMap<>();
+
     @SubscribeEvent
     public void onRenderWorld(RenderWorldLastEvent event)
     {
@@ -72,14 +77,27 @@ public class BeamHighlight
             EntityGuardian guardian = maxGuardians.get(i);
             EntityLivingBase target = minTargets.get(i);
 
-            BlockPos gPos = guardian.getPosition();
-            Vector3f gPosVec = new Vector3f(gPos.getX(), gPos.getY(), gPos.getZ());
+            // Get or create previous positions
+            Vector3f prevGuardianPos = prevPositions.computeIfAbsent(guardian, k -> new Vector3f((float) guardian.posX, (float) guardian.posY, (float) guardian.posZ));
+            Vector3f prevTargetPos = prevPositions.computeIfAbsent(target, k -> new Vector3f((float) target.posX, (float) target.posY, (float) target.posZ));
 
-            BlockPos tPos = target.getPosition();
-            Vector3f tPosVec = new Vector3f(tPos.getX(), tPos.getY(), tPos.getZ());
+            // Interpolate positions
+            Vector3f interpGuardianPos = interpolatePosition(prevGuardianPos, new Vector3f((float) guardian.posX, (float) guardian.posY, (float) guardian.posZ), event.partialTicks);
+            Vector3f interpTargetPos = interpolatePosition(prevTargetPos, new Vector3f((float) target.posX, (float) target.posY, (float) target.posZ), event.partialTicks);
 
-            RenderUtil.drawRectangle(gPosVec, tPosVec, 0f, 0.7f,0.7f, 0.5f, false);
-            RenderUtil.drawRectangleOutline(gPosVec, tPosVec, 0f, 0.7f,0.7f, 1f, false);
+            if(DeltaConfig.beam2d)
+            {
+                RenderUtil.drawRectangle2(interpGuardianPos, interpTargetPos,  0f, 0.7f,0.7f, 0.15f, true);
+                RenderUtil.drawRectangleOutline(interpGuardianPos, interpTargetPos,  0f, 0.7f,0.7f, 1f, true);
+            }
+            else
+            {
+                RenderUtil.drawRectangularPrism(interpGuardianPos, interpTargetPos, 0.5f, 0f, 0.7f,0.7f, 0.15f, true, GL11.GL_QUADS);
+                RenderUtil.drawRectangularPrism(interpGuardianPos, interpTargetPos, 0.5f, 0f, 0.7f,0.7f, 1f, true, GL11.GL_LINE_STRIP);
+            }
+
+            prevPositions.put(guardian, interpGuardianPos);
+            prevPositions.put(target, interpTargetPos);
         }
     }
 }
