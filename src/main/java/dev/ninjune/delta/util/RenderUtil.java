@@ -1,8 +1,9 @@
 package dev.ninjune.delta.util;
 
-import dev.ninjune.delta.util.CTLibs.Tessellator;
+import dev.ninjune.delta.util.ctlibs.Tessellator;
 import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.vector.Vector3f;
 
 
 public class RenderUtil
@@ -99,17 +100,10 @@ public class RenderUtil
         GlStateManager.popMatrix();
     }
 
-    public static void drawRectangularPrism (float x1, float y1, float z1,
-                                   float x2, float y2, float z2, float red, float green, float blue, float alpha,
-                                   boolean phase
-    )
+    public static void drawLine(float x1, float y1, float z1,
+                               float x2, float y2, float z2, float red, float green, float blue, float alpha,
+                               boolean phase)
     {
-        double minX = Math.min(x1, x2) - 0.005;
-        double minY = Math.min(y1, y2) - 0.005;
-        double minZ = Math.min(z1, z2) - 0.005;
-        double maxX = Math.max(x1, x2) + 1.005;
-        double maxY = Math.max(y1, y2) + 1.005;
-        double maxZ = Math.max(z1, z2) + 1.005;
         GlStateManager.pushMatrix();
         GL11.glLineWidth(2.0F);
         GlStateManager.disableCull(); // disableCullFace
@@ -148,7 +142,7 @@ public class RenderUtil
         double endY = y2 + Math.sin(angleX);
         double endZ = z2 - Math.cos(angleY);
 
-        drawLine(startX, startY, startZ, endX, startY, endZ);
+        addLine(startX, startY, startZ, endX, endY, endZ);
 
         Tessellator.draw();
 
@@ -163,11 +157,93 @@ public class RenderUtil
         GlStateManager.popMatrix();
     }
 
-    private static void drawLine(double x1, double y1, double z1, double x2, double y2, double z2)
+
+    public static void drawRectangle(Vector3f topLeft, Vector3f bottomRight,
+                                            float red, float green, float blue, float alpha, boolean phase) {
+        GlStateManager.pushMatrix();
+        GL11.glLineWidth(2.0f);
+        GlStateManager.disableCull();
+        GlStateManager.enableBlend();
+        GlStateManager.blendFunc(770, 771);
+        GlStateManager.depthMask(false);
+        GlStateManager.disableTexture2D();
+
+        if (phase)
+            GlStateManager.disableDepth();
+
+        double x1 = topLeft.x, y1 = topLeft.y, z1 = topLeft.z;
+        double x2 = bottomRight.x, y2 = bottomRight.y, z2 = bottomRight.z;
+
+        Tessellator.begin(GL11.GL_QUADS, true);
+        Tessellator.colorize(red, green, blue, alpha);
+
+        addLine(x1, y1, z1, x2, y1, z2);
+
+        pushPos(x2,y2,z2);
+        pushPos(x1, y2, z1);
+
+        pushPos(x1, y1, z1);
+
+        Tessellator.draw();
+
+        GlStateManager.enableCull();
+        GlStateManager.disableBlend();
+        GlStateManager.depthMask(true);
+        GlStateManager.enableTexture2D();
+
+        if (phase)
+            GlStateManager.enableDepth();
+
+        GlStateManager.popMatrix();
+    }
+
+
+    public static void drawRectangleOutline(Vector3f topLeft, Vector3f bottomRight,
+                                            float red, float green, float blue, float alpha, boolean phase)
+    {
+        GlStateManager.pushMatrix();
+        GL11.glLineWidth(2.0f);
+        GlStateManager.disableCull();
+        GlStateManager.enableBlend();
+        GlStateManager.blendFunc(770, 771);
+        GlStateManager.depthMask(false);
+        GlStateManager.disableTexture2D();
+
+        if (phase)
+            GlStateManager.disableDepth();
+
+        double x1 = topLeft.x, y1 = topLeft.y, z1 = topLeft.z;
+        double x2 = bottomRight.x, y2 = bottomRight.y, z2 = bottomRight.z;
+
+        Tessellator.begin(GL11.GL_LINE_STRIP, true);
+        Tessellator.colorize(red, green, blue, alpha);
+
+        addLine(x1, y1, z1, x2, y1, z2);
+
+        pushPos(x2,y2,z2);
+        pushPos(x1, y2, z1);
+
+        pushPos(x1, y1, z1);
+
+        Tessellator.draw();
+
+        GlStateManager.enableCull();
+        GlStateManager.disableBlend();
+        GlStateManager.depthMask(true);
+        GlStateManager.enableTexture2D();
+
+        if (phase)
+            GlStateManager.enableDepth();
+
+        GlStateManager.popMatrix();
+    }
+
+    private static void addLine(double x1, double y1, double z1, double x2, double y2, double z2)
     {
         pushPos(x1, y1, z1);
         pushPos(x2, y2, z2);
     }
+
 
     private static void pushPos(double x, double y, double z)
     {

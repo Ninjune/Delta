@@ -1,13 +1,11 @@
-package dev.ninjune.delta.util.CTLibs;
+package dev.ninjune.delta.util.ctlibs;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-
-import static java.lang.Math.sqrt;
+import org.lwjgl.util.vector.Vector3f;
 
 public class Tessellator {
     private static final Tessellator instance = new Tessellator();
@@ -21,7 +19,6 @@ public class Tessellator {
 
     /**
      * Disables alpha in the GLStateManager.
-     * @return itself
      */
     public static void disableAlpha() {
         GlStateManager.disableAlpha();
@@ -30,7 +27,6 @@ public class Tessellator {
 
     /**
      * Enables alpha in the GLStateManager.
-     * @return itself
      */
     public static void enableAlpha() {
         GlStateManager.enableAlpha();
@@ -188,6 +184,10 @@ public class Tessellator {
         GlStateManager.translate(x, y, z);
     }
 
+    public static void rotateYaw(float angle) {
+        GlStateManager.rotate(angle, 0.0F, 1.0F, 0.0F);
+    }
+
     /**
      * Scales the Tessellator in 3d space.
      * Similar to [com.chattriggers.ctjs.minecraft.libs.renderer.Renderer.scale]
@@ -215,6 +215,13 @@ public class Tessellator {
             worldRenderer.endVertex();
         worldRenderer.pos(x, y, z);
         firstVertex = false;
+    }
+
+    /**
+     * @see #pos(double, double, double)
+     */
+    public static void pos(Vector3f pos) {
+        pos(pos.x, pos.y, pos.z);
     }
 
     /**
