@@ -160,6 +160,8 @@ public class RenderUtil
 
     public static void drawRectangularPrism(Vector3f start, Vector3f end,
                                             float depth, float red, float green, float blue, float alpha, boolean phase, int glMode) {
+        if(start == null || end == null)
+            return;
         // Calculate the direction vector from start to end points
         Vector3f direction = (Vector3f) new Vector3f(end.x - start.x, end.y - start.y, end.z - start.z).normalise();
 

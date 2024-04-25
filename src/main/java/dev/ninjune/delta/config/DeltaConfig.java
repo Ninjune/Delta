@@ -30,7 +30,14 @@ public class DeltaConfig extends Config
             category = "Slayers",
             subcategory = "Blaze"
     )
-    public static boolean beam2d = true;
+    public static boolean beam2d = false;
+
+    @Switch(
+            name = "Slime NoRender",
+            description = "No render for slimes/sludges in chollows.",
+            category = "General"
+    )
+    public static boolean slimeNoRender = false;
 
     public DeltaConfig()
     {

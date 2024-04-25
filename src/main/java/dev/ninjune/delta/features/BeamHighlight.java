@@ -1,11 +1,11 @@
 package dev.ninjune.delta.features;
 
 import dev.ninjune.delta.config.DeltaConfig;
+import dev.ninjune.delta.util.SBInfo;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityGuardian;
 import dev.ninjune.delta.util.RenderUtil;
-import net.minecraft.util.BlockPos;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.opengl.GL11;
@@ -28,7 +28,9 @@ public class BeamHighlight
     @SubscribeEvent
     public void onRenderWorld(RenderWorldLastEvent event)
     {
-        if(!DeltaConfig.beamHighlight) return;
+        if(!DeltaConfig.beamHighlight)
+            return;
+        //System.out.println(SBInfo.getLocation());
         List<Entity> entities = mc.theWorld.loadedEntityList;
         ArrayList<EntityGuardian> guardians = new ArrayList<>();
 
@@ -87,13 +89,13 @@ public class BeamHighlight
 
             if(DeltaConfig.beam2d)
             {
-                RenderUtil.drawRectangle2(interpGuardianPos, interpTargetPos,  0f, 0.7f,0.7f, 0.15f, true);
-                RenderUtil.drawRectangleOutline(interpGuardianPos, interpTargetPos,  0f, 0.7f,0.7f, 1f, true);
+                RenderUtil.drawRectangle2(interpGuardianPos, interpTargetPos,  0f, 0.7f,0.7f, 0.15f, false);
+                RenderUtil.drawRectangleOutline(interpGuardianPos, interpTargetPos,  0f, 0.7f,0.7f, 1f, false);
             }
             else
             {
-                RenderUtil.drawRectangularPrism(interpGuardianPos, interpTargetPos, 0.5f, 0f, 0.7f,0.7f, 0.15f, true, GL11.GL_QUADS);
-                RenderUtil.drawRectangularPrism(interpGuardianPos, interpTargetPos, 0.5f, 0f, 0.7f,0.7f, 1f, true, GL11.GL_LINE_STRIP);
+                RenderUtil.drawRectangularPrism(interpGuardianPos, interpTargetPos, 0.5f, 0f, 0.7f,0.7f, 0.15f, false, GL11.GL_QUADS);
+                RenderUtil.drawRectangularPrism(interpGuardianPos, interpTargetPos, 0.5f, 0f, 0.7f,0.7f, 1f, false, GL11.GL_LINE_STRIP);
             }
 
             prevPositions.put(guardian, interpGuardianPos);

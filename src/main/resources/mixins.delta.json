@@ -1,5 +1,5 @@
 {
-  "package": "${mixinGroup}",
+  "package": "dev.ninjune.delta.mixin",
   "refmap": "mixins.${modid}.refmap.json",
   "minVersion": "0.7",
   "compatibilityLevel": "JAVA_8",

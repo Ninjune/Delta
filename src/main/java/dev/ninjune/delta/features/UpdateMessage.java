@@ -24,17 +24,18 @@ public class UpdateMessage
 
     }
 
-
-    /*@SubscribeEvent
+    /*
+    @SubscribeEvent
     public void onServerJoin(FMLNetworkEvent.ClientConnectedToServerEvent event)
     {
         try
         {
             BufferedReader req = request("https://raw.githubusercontent.com/Ninjune/Delta/master/gradle.properties");
-            req.readLine();
+            req.
         } catch (IOException e)
         {
             throw new RuntimeException(e);
         }
-    }*/
+    }
+    */
 }

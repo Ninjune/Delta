@@ -21,7 +21,7 @@ public class SBInfo
             try
             {
                 Thread.sleep(1000, 0); // arbitrary number
-                location = intGetLocation();
+                location = _getLocation();
             } catch (InterruptedException e)
             {
                 throw new RuntimeException(e);
@@ -34,7 +34,7 @@ public class SBInfo
         return location;
     }
 
-    private static String intGetLocation()
+    private static String _getLocation()
     {
         List<String> tab = TabList.getNames();
         final Pattern pattern = Pattern.compile("/Area|Dungeons: ([\\w ]+)/");
