@@ -3,6 +3,7 @@
 
 Features:
 - Blaze beam highlight
+- Slime NoRender
 
 ## Setup Developer Environment
 ### IntelliJ Idea
